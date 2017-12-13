@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask
+from flask import Flask, render_template
 import string
 app = Flask(__name__)
 
@@ -20,13 +20,11 @@ def c_text(text):
 
 
 @app.route('/python/', strict_slashes=False)
-def python():
-        return 'Python is cool'
-
-
 @app.route('/python/<text>', strict_slashes=False)
-def python_text(text):
-        return 'Python %s' % text.replace('_', ' ')
+def python_text(text=None):
+        if text:
+                return 'Python %s' % text.replace('_', ' ')
+        return 'Python is cool'
 
 
 @app.route('/number/<int:n>', strict_slashes=False)
