@@ -27,11 +27,6 @@ def python_text(text=None):
         return 'Python is cool'
 
 
-@app.route('/python/<text>', strict_slashes=False)
-def python_text(text):
-        return 'Python %s' % text.replace('_', ' ')
-
-
 if __name__ == '__main__':
         # app.run() defaults to listening on port 5000
         app.run(host="0.0.0.0")
