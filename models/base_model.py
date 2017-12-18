@@ -9,7 +9,6 @@ import models
 import uuid
 import os
 
-time = "%Y-%m-%dT%H:%M:%S.%f"
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
     Base = declarative_base()
 else:
@@ -25,25 +24,32 @@ class BaseModel:
         updated_at = Column(DateTime, default=datetime.utcnow)
 
     def __init__(self, *args, **kwargs):
-        """Initialization of the base model"""
-        if kwargs:
-            for key, value in kwargs.items():
-                if key != "__class__":
-                    setattr(self, key, value)
-            if kwargs.get("created_at", None) and type(self.created_at) is str:
-                self.created_at = datetime.strptime(kwargs["created_at"], time)
-            else:
-                self.created_at = datetime.utcnow()
-            if hasattr("updated_at", None) and type(self.updated_at) is str:
-                self.updated_at = datetime.strptime(kwargs["updated_at"], time)
-            else:
-                self.created_at = datetime.utcnow()
-            if kwargs.get("id", None) is None:
-                self.id = str(uuid.uuid4())
+        """initializing instance variables"""
+        # set the default first
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = self.created_at
+
+        # if it's a new instance (not from dict reprsntion)
+        # when nothing is passed to kwargs, it defaults to {}
+        if not kwargs or kwargs is None:
+            pass
+            '''
+            # store instance in dict to save to file later
+            models.storage.new(self)
+            '''
+
         else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = self.created_at
+            # set given attribute from kwargs
+            for k, v in kwargs.items():
+                if k == 'created_at' or k == 'updated_at':
+                    v = self.to_datetime(v)
+                setattr(self, k, v)
+
+    def to_datetime(self, string):
+        """convert datetime string to datetime object"""
+        time = "%Y-%m-%dT%H:%M:%S.%f"
+        return datetime.strptime(string, time)
 
     def __str__(self):
         """String representation of the BaseModel class"""

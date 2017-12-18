@@ -7,7 +7,7 @@ from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
-    place_amenity = Table('association', Base.metadata,
+    place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60), ForeignKey(
                               'places.id'), primary_key=True),
                           Column('amenity_id', String(60), ForeignKey(
