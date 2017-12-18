@@ -47,7 +47,7 @@ class HBNBCommand(cmd.Cmd):
             for param in args[1:]:
                 '''parse param into key_name & value'''
                 param_match = re.fullmatch(
-                    '[A-Za-z_]+="([-A-Za-z0-9\._]+)"', param)
+                    '[A-Za-z_]+="([-A-Za-z0-9\._ @]+)"', param)
                 param = shlex.shlex(param)
                 param.whitespace += '='
                 param.whitespace_split = True
